@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../controllers/imc_controller.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -10,6 +11,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final IMCController _controller = IMCController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,9 +22,14 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title, style: const TextStyle(color: Colors.white)),
         actions: [
           IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.refresh),
-              color: Colors.white),
+            onPressed: () {
+              setState(() {
+                _controller.resetFields();
+              });
+            },
+            icon: const Icon(Icons.refresh),
+            color: Colors.white,
+          ),
         ],
       ),
       body: SingleChildScrollView(
@@ -31,26 +39,32 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             const Icon(Icons.person_outline, size: 120, color: Colors.green),
             const SizedBox(height: 16),
-            const TextField(
+            TextField(
+              controller: _controller.weightController,
               keyboardType: TextInputType.number,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                   labelText: "Peso (kg)",
                   labelStyle: TextStyle(color: Colors.green)),
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.green, fontSize: 25),
+              style: const TextStyle(color: Colors.green, fontSize: 25),
             ),
             const SizedBox(height: 16),
-            const TextField(
+            TextField(
+              controller: _controller.heightController,
               keyboardType: TextInputType.number,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                   labelText: "Altura (cm)",
                   labelStyle: TextStyle(color: Colors.green)),
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.green, fontSize: 25),
+              style: const TextStyle(color: Colors.green, fontSize: 25),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                setState(() {
+                  _controller.calculateIMC();
+                });
+              },
               style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
                   padding: const EdgeInsets.symmetric(vertical: 10)),
@@ -58,10 +72,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   style: TextStyle(color: Colors.white, fontSize: 25)),
             ),
             const SizedBox(height: 16),
-            const Text(
-              'Informe seus dados!',
+            Text(
+              _controller.infoText,
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.green, fontSize: 25),
+              style: const TextStyle(color: Colors.green, fontSize: 25),
             ),
           ],
         ),
